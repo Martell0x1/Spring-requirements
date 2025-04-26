@@ -485,3 +485,146 @@ public class AccountService {
 - [muratkarakas/solid-principles](https://github.com/muratkarakas/solid-principles)
 - [chethanmandya/SOLID-Principles](https://github.com/chethanmandya/SOLID-Principles)
 - [INSATunisia/SOLID](https://github.com/INSATunisia/SOLID)
+---
+# Dependency Injection (DI)
+- **Theory:** A design pattern that makes a class independent of it's dependencies , used to achieve **Inversion of Control(IoC)**
+- A class that has dependencies is fully responsible of creating them , DI is like another entity that makes this dependencies for the class , so that the class should only focus on it's internal work
+- Dependency injection is very close to Dependency inversion (D in solid) , we will compare between both
+
+- **Types of DI**: (Constructor DI , Setter DI , Interface DI)
+- **Consturctor DI:**  the dependencies are provided through a class constructor, the class gets all dependencies at the time of instantiation
+- **Setter DI:** the client exposes a setter method that the injector uses to inject the dependency, the class gets the dependencies after the creation of the class
+- **Interface DI:** the dependency provides an injector method that will inject the dependency into any client passed to it. Clients must implement an interface that exposes a [setter method](https://en.wikipedia.org/wiki/Setter_method) that accepts the dependency.
+
+```java
+class Service {
+    public void serve() {
+        System.out.println("Service is serving...");
+    }
+}
+
+class Client {
+    private Service service = new Service(); // Client creates its own Service
+
+    public void doSomething() {
+        service.serve();
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Client client = new Client();
+        client.doSomething();
+    }
+}
+
+```
+- let's try to inject the dependency using the constructor.
+```java
+class Service {
+    public void serve() {
+        System.out.println("Service is serving...");
+    }
+}
+
+class Client {
+    private Service service;
+
+    // Inject Service through constructor
+    public Client(Service service) {
+        this.service = service;
+    }
+
+    public void doSomething() {
+        service.serve();
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Service service = new Service();    // Create the dependency
+        Client client = new Client(service); // Inject it into Client
+        client.doSomething();
+    }
+}
+
+```
+- setter DI , is the same as constructor but instead of the constructor a setter functions takes the dependency and assign to the local object 
+
+- both constructor DI and setter DI solve the DI problem , but it opens the door to other problems (DIP - dependency inversion principle) 
+- DIP says hight-level modules should not depend on low-level modules , both must depend on abstraction
+- so keep this in mind.
+
+- this is the same thing but using Interface DI
+```java
+// Service interface
+interface Service {
+    void serve();
+}
+
+// Concrete implementation of Service
+class EmailService implements Service {
+    @Override
+    public void serve() {
+        System.out.println("EmailService is serving...");
+    }
+}
+
+// Client class
+class Client {
+    private Service service; // depends on Service interface
+
+    // Setter for injecting the dependency
+    public void setService(Service service) {
+        this.service = service;
+    }
+
+    public void doSomething() {
+        if (service != null) {
+            service.serve();
+        } else {
+            System.out.println("No service available.");
+        }
+    }
+}
+
+// Main class
+public class Main {
+    public static void main(String[] args) {
+        Service emailService = new EmailService(); // Create the dependency
+        Client client = new Client();
+        client.setService(emailService); // Inject the dependency using setter
+        client.doSomething();
+    }
+}
+
+```
+- if you took a look at this you realize that we have actually solved 2 problems the DI and the DIP
+- DI = the class gets it's dependencies from an external entity that injects the dependency in the class's ports
+- DIP = high-level modules should not depend on low-level modules , both should depend on abstraction.
+
+- so **Interface + Dependency Injection = Solves both DI technique and DIP principle.**
+- DI **reduces coupling** (a little) and **improves testability**, because you can inject mocks/fakes easily.
+---
+# Inversion of Control (IoC)
+- **Theory:** developers should keep their business logic clean by externalizing complicated and complex configurations , system interactions ...etc , such that those complex tasks should be handled by and IoC framework
+- in normal code , you control everything (object creation, method calling, etc.) , and you manually create and wire objects
+- in IoC You **delegate** control to a **framework** or **container** , A container (like Spring) creates and injects objects for you.
+
+- **Dependency Injection is a form of IoC.**
+    
+- In DI:
+    
+    - Instead of your class creating its dependencies (`new Service()`),
+        
+    - A **container** (like Spring) **injects** the dependency for you.
+
+**So:**
+
+> **IoC is the broad idea**, and **Dependency Injection is one way to implement IoC.**
+
+### The Hollywood Principle
+- **Don't call us, we'll call you.** 
+- **You don't call the framework.**
+- **The framework will call you** when needed.
+
