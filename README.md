@@ -2,7 +2,7 @@
   <img src="https://img.shields.io/badge/SOLID-Studying%20Repo-blue?style=for-the-badge&logo=read-the-docs&logoColor=white" alt="SOLID Study Badge" />
 </p>
 <h1 align="center">
-  📚 Spring
+  📚 SOLID And More
 </h1>
 ---
 
