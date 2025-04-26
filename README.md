@@ -1,8 +1,10 @@
+<p align="center">
+  <img src="https://img.shields.io/badge/SOLID-Studying%20Repo-blue?style=for-the-badge&logo=read-the-docs&logoColor=white" alt="SOLID Study Badge" />
+</p>
+<h1 align="center">
+  📚 Spring
+</h1>
 ---
-
----
----
-# 📚 Spring Prerequisites Study Guide
 
 This repository covers the essential prerequisites for learning Spring, focusing on key concepts such as **SOLID principles**, **Maven**, and **Apache Tomcat**.
 
